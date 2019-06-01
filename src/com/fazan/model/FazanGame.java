@@ -2,13 +2,10 @@ package com.fazan.model;
 
 import com.fazan.service.WordService;
 import com.fazan.utils.Constants;
-import com.oracle.tools.packager.Log;
 
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class FazanGame {
 
@@ -42,6 +39,10 @@ public class FazanGame {
         this.printGameStatistics();
     }
 
+    /**
+     * Method that prints some games stats
+     * like end game standings
+     */
     private void printGameStatistics() {
 
         List<Player> eligiblePlayersList = this.playerList;
@@ -60,6 +61,12 @@ public class FazanGame {
         }
     }
 
+    /**
+     * Main logic method. Take input from the given
+     * player and validates the word, gives the player
+     * chances to input a valid word until hs life or
+     * chances get to 0
+     */
     private void continueGameWithPlayer(Player currentPlayer) {
 
         String playerWord = this.getInputWordFromPlayer(currentPlayer);
@@ -68,7 +75,7 @@ public class FazanGame {
         while (!isValidWord && currentPlayer.getLifes() > 0 && currentPlayer.getChances() > 0) {
             currentPlayer.updateOnWrongWord();
 
-            System.out.printf("[" + getClass().getSimpleName() + "] Your word '%s' is NOT VALID. Lifes left: %d. Changes left %d\n", playerWord, currentPlayer.getLifes(), currentPlayer.getChances());
+            System.out.printf("[" + getClass().getSimpleName() + "] Your word '%s' is NOT VALID. Lifes left: %d. Chances left %d\n", playerWord, currentPlayer.getLifes(), currentPlayer.getChances());
             if (currentPlayer.getChances() == 0 || currentPlayer.getLifes() == 0) {
                 currentPlayer.updateOnWrongWord();
                 isValidWord = false;
@@ -79,8 +86,16 @@ public class FazanGame {
         }
 
 
+        /*
+         * Check to see if the word was valid if it was we replace the previous word
+         * and we also check if it's a close word case in which we update the life of the
+         * next player and skip him
+         *
+         * If it wasn't valid, we finished a round reinitialise the previous word and set
+         * roundStart on true
+         * */
         if (isValidWord) {
-            System.out.printf("[" + getClass().getSimpleName() + "] Your word '%s' is VALID. Lifes left: %d. Changes left %d\n", playerWord, currentPlayer.getLifes(), currentPlayer.getChances());
+            System.out.printf("[" + getClass().getSimpleName() + "] Your word '%s' is VALID. Lifes left: %d. Chances left %d\n", playerWord, currentPlayer.getLifes(), currentPlayer.getChances());
             previousWord = playerWord;
             this.roundStart = false;
 
@@ -101,16 +116,19 @@ public class FazanGame {
         currentPlayer.setChances(Constants.CHANCES);
     }
 
+    /**
+     * Maine method that takes input from currentPlayer
+     */
     private String getInputWordFromPlayer(Player currentPlayer) {
 
         String startWithString = "";
         String playerWord = "";
 
         /*
-        * A little more complex check for the case when the game starts
-        * but the words that the player inputs are not in the dictionary
-        * so the player must enter a new word but with the same letter
-        * */
+         * A little more complex check for the case when the game starts
+         * but the words that the player inputs are not in the dictionary
+         * so the player must enter a new word but with the same letter
+         * */
         if (roundStart && currentPlayer.getChances() > 0 && (previousWord.length() == 0 || previousWord.length() == 2)) {
             Random r = new Random();
             startWithString = (char)(r.nextInt(26) + 'a') + "";
@@ -134,6 +152,9 @@ public class FazanGame {
         }
     }
 
+    /**
+     * Return the next player that has active status on true
+     * */
     protected Player getNextActivePlayer() {
 
         int tempCurrentPlayerId = this.currentPlayerId;
@@ -157,35 +178,10 @@ public class FazanGame {
         return playerList.get(tempCurrentPlayerId);
     }
 
-//    protected Player getNextPlayerFromPrevious() {
-//
-//        List<Player> eligiblePlayersList = this.getPlayersEligibleForPlay();
-//
-//        currentPlayerId++;
-//        //Cycle reset
-//        if (currentPlayerId >= eligiblePlayersList.size()) {
-//            currentPlayerId = 0;
-//        }
-//
-//        if (eligiblePlayersList.size() != 1) {
-//
-//            Player currentPlayer = this.playerList.get(currentPlayerId);
-//            while (!currentPlayer.isActive()) {
-//                currentPlayerId++;
-//
-//                //Cycle reset
-//                if (currentPlayerId == eligiblePlayersList.size()) {
-//                    currentPlayerId = 0;
-//                }
-//            }
-//
-//            return currentPlayer;
-//        }
-//
-//        this.gameOn = false;
-//        return eligiblePlayersList.get(0);
-//    }
 
+    /**
+     * Return a list of players that are still eligible to play
+     * */
     private List<Player> getPlayersEligibleForPlay() {
 
         return this.playerList
@@ -195,6 +191,11 @@ public class FazanGame {
 
     }
 
+
+    /**
+     * Method that initializes the main properties
+     * of the game.
+     * */
     private List<Player> initializeGame() {
 
         /* Set game's name randomly*/

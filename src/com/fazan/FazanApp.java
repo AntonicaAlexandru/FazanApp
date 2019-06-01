@@ -7,10 +7,8 @@ import com.fazan.utils.Constants;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class FazanApp {
@@ -31,6 +28,11 @@ public class FazanApp {
         gamesList = new ArrayList<>();
     }
 
+    /**
+     * Main menu method that presents the user
+     * the actions that are available and executes
+     * them accordingly
+     */
     public void startApp() {
 
         while (this.appOn) {
@@ -64,6 +66,11 @@ public class FazanApp {
         }
     }
 
+
+    /**
+     * Method that saved the list of game to a
+     * file: resources/games.txt
+     */
     private void saveListOfGames() {
 
         /*
@@ -122,6 +129,11 @@ public class FazanApp {
         } catch (IOException e) { }
     }
 
+
+    /**
+     * Method that takes input from the user about
+     * which action he wants to perform
+     */
     private int getUserCommandId() {
 
         // auto close scanner
@@ -152,6 +164,10 @@ public class FazanApp {
         return input;
     }
 
+    /**
+     * Method that lists the contents of
+     * resources/games.txt
+     * */
     private void listGameResult() {
         System.out.println("List game result");
 

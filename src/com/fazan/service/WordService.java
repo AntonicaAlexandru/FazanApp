@@ -1,15 +1,11 @@
 package com.fazan.service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,7 +15,7 @@ import static org.junit.Assert.assertNotNull;
 public class WordService {
 
     private static Set<String> wordSet = null;
-    private Set<String> usedWords = null;
+    private Set<String> usedWords;
 
 
     public WordService() {
@@ -44,9 +40,16 @@ public class WordService {
         }
     }
 
+
+    /**
+     * Method that validates word
+     * agains the "database" file from
+     * resources/words.txt
+     */
     public boolean validateWord(String previousWord, String playerWord, boolean roundStart) {
 
         /* Sanity checks */
+        assertNotNull(previousWord);
         assertNotNull(previousWord);
         assertNotNull(playerWord);
 
@@ -71,12 +74,15 @@ public class WordService {
         return true;
     }
 
+    /**
+     * Method that checks whether or not the given word
+     * is a closed word or not
+     */
     public boolean closeWord(String playerWord) {
         /* Sanity checks */
         assertNotNull(playerWord);
         String suffix = playerWord.substring(playerWord.length() - 2);
 
-        ;
         if (wordSet.stream().filter(s -> s.startsWith(suffix)).collect(Collectors.toList()).size() <= 0) {
             log("There is no word in out dictionary with :" + suffix);
             return true;
