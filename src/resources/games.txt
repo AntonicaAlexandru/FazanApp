@@ -1,0 +1,4 @@
+{GameID 1559410669600=[Player Player1 finished on place 1, Player Player2 finished on place 2]}
+------------------
+{GameID 1559410728095=[Player Player2 finished on place 1, Player Player1 finished on place 2]}
+------------------
